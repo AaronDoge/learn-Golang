@@ -7,7 +7,7 @@ Go语言里的并发指的是能让某个函数独立于其他函数运行的能
 Go语言的的调度器是一个复杂的软件，能管理被创建的所有goroutine并为其分配执行时间。这个调度器在操作系统之上，将操作系统的线程与语言运行时的逻辑处理器绑定，并在逻辑处理器上运行。
 
 
-1.并发与并行
+1. 并发与并行
 -------------------------
 
  - 什么是操作系统的进程(thread)和线程(Process)? 
@@ -19,3 +19,65 @@ Go语言的的调度器是一个复杂的软件，能管理被创建的所有gor
 Go语言运行时会把goroutine调度到逻辑处理器上运行。这个逻辑处理器绑定到唯一的操作系统线程。当goroutine可以运行的时候，会被放入逻辑处理器的执行队列中。
 
 当goroutine执行了一个阻塞的系统调用时，调度器会将这个线程与处理器分离，该线程会继续阻塞，等待系统调用的返回。与此同时，这个逻辑处理器就是去了用来运行的线程，此时调度器会创建一个新线程，并将其绑定在这个逻辑处理器上。之后，调度器会从本地运行队列中选择另一个goroutine来运行。一旦之前被阻塞的系统调用执行完成并返回，对应的goroutine会放回到本地运行队列，而之前的线程会保存好，以便之后可以继续使用。
+
+
+2. Goroutine
+-----------------------------
+
+
+
+```go
+//这个示例程序展示如何促进goroutine
+
+package main
+
+import (
+	"fmt"
+	"runtime"
+	"sync"
+)
+
+func main() {
+	//分配一个逻辑处理器
+	runtime.GOMAXPROCS(1)
+
+	//
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	fmt.Println("Start Goroutines")
+
+	//声明一个匿名函数，并创建一个goroutine
+	go func() {
+		//在函数退出时调用Done来通知main函数工作已经完成
+		defer wg.Done()
+
+		//显示字母表3次
+		for count := 0; count < 3; count++ {
+			for char := 'a'; char < 'a'+26; char++ {
+				fmt.Printf("%c ", char)
+			}
+		}
+	}()
+
+	//声明一个匿名函数，并创建一个goroutine
+	go func() {
+		//在函数退出时调用Done来通知main函数工作已经完成
+		defer wg.Done()
+
+		//显示字母3次
+		for count := 0; count < 3; count++ {
+			for char := 'A'; char < 'A'+26; char++ {
+				fmt.Printf("%c ", char)
+			}
+		}
+	}()
+
+	//等待goroutine结束
+	fmt.Println("Waiting To Finish...")
+	wg.Wait()
+
+	fmt.Println("\n Terminating Program")
+}
+
+```
