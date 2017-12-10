@@ -8,7 +8,7 @@ Go语言中的map
 
 
 
-	* make([keyType] valueType, cap)，cap表示容量，可以省略
+	* `make([keyType] valueType, cap)`，cap表示容量，可以省略
 	* 超出容量时会自动扩容，但尽量提供一个合理的初始值
 	* 使用len()获取元素个数
 
@@ -147,7 +147,7 @@ func main() {
 ```
 
 **顺序输出一个map**
-    把map的key存储到slice中，对slice进行排序，然后按slice中k的顺序取出map中对应的值。
+把map的key存储到slice中，对slice进行排序，然后按slice中k的顺序取出map中对应的值。
 ```go
 package main
 import (
