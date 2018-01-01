@@ -23,7 +23,7 @@ type ProofOfWork struct {
 //target等于1左移256-targetBits位
 func NewProofOfWork(b *Block) *ProofOfWork {
 	target := big.NewInt(1)
-	target.Lsh(target, unit(256-targetBits))
+	target.Lsh(target, uint(256-targetBits))
 
 	pow := &ProofOfWork{b, target}
 
@@ -58,7 +58,7 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 		hash = sha256.Sum256(data)
 		hashInt.SetBytes(hash[:])
 
-		if hashInt.Cmp(pow.target == -1) {
+		if hashInt.Cmp(pow.target) == -1 {
 			fmt.Printf("\r%x", hash)
 			break
 		} else {
@@ -77,6 +77,7 @@ func (pow *ProofOfWork) Validate() bool {
 
 	data := pow.prepareData(pow.block.Nonce)
 	hash := sha256.Sum256(data)
+	hashInt.SetBytes(hash[:])
 
 	isValid := hashInt.Cmp(pow.target) == -1
 

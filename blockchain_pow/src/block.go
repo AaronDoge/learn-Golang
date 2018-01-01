@@ -17,7 +17,7 @@ type Block struct {
 func NewBlock(data string, prevBlockHash []byte) *Block {
 	block := &Block{
 		Timestamp:     time.Now().Unix(),
-		prevBlockHash: prevBlockHash,
+		PrevBlockHash: prevBlockHash,
 		Hash:          []byte{},
 		Data:          []byte(data),
 		Nonce:         0,
