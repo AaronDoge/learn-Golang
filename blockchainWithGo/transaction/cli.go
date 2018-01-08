@@ -10,6 +10,7 @@ import (
 
 type CLI struct{}
 
+//
 func (cli *CLI) createBlockchain(address string) {
 	bc := CreateBlockchain(address)
 	bc.db.Close()
