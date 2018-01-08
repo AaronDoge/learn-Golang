@@ -17,6 +17,7 @@ func (cli *CLI) createBlockchain(address string) {
 	fmt.Println("Done!")
 }
 
+//
 func (cli *CLI) getBalance(address string) {
 	bc := NewBlockchain(address)
 	defer bc.db.Close()
