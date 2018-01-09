@@ -59,6 +59,7 @@ func NewBlock(transaction []*Transaction, prevBlockHash []byte) *Block {
 	return block
 }
 
+//NewGenesisBlock creates and returns Genesis Block
 func NewGenesisBlock(coinbase *Transaction) *Block {
 	return NewBlock([]*Transaction{coinbase}, []byte{})
 }
