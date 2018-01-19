@@ -10,22 +10,22 @@ import (
 
 const targetBits = 24
 
-var(
+var (
 	maxNonce = math.MaxInt64
 )
 
 type ProofOfWork struct {
-	block *Block 
-	target *big.Int 
+	block  *Block
+	target *big.Int
 }
 
-func NewProofOfWork(b *Block) *ProofOfWork{
+func NewProofOfWork(b *Block) *ProofOfWork {
 	target := big.NewInt(1)
 	target.Lsh(target, uint(256-targetBits))
 
 	pow := &ProofOfWork{b, target}
 
-	return pow 
+	return pow
 }
 
 func (pow *ProofOfWork) prepareData(nonce int) []byte {
@@ -40,13 +40,13 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 		[]byte{},
 	)
 
-	return data 
+	return data
 }
 
 func (pow *ProofOfWork) Run() (int, []byte) {
-	var hashInt big.Int 
-	var hash [32]byte 
-	nonce :=0
+	var hashInt big.Int
+	var hash [32]byte
+	nonce := 0
 
 	fmt.Printf("Mining a new block")
 	for nonce < maxNonce {
@@ -65,4 +65,17 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 	fmt.Print("\n\n")
 
 	return nonce, hash[:]
+}
+
+//
+func (pow *ProofOfWork) Validate() bool {
+	var hashInt big.Int
+
+	data := pow.prepareData(pow.block.Nonce)
+	hash := sha256.Sum256(data)
+	hashInt.SetBytes(hash[:])
+
+	isValid := hashInt.Cmp(pow.target) == -1
+
+	return isValid
 }
