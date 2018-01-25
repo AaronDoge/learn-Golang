@@ -15,4 +15,6 @@ type Transaction struct {
 }
 ```
 
+每一笔新的交的输入会引用(reference)之前一笔交易的输出(这里有个例外，就是coinbase交易，它是奖励机制中对于打包区块节点的奖励)。
+
 
